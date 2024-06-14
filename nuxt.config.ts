@@ -8,6 +8,6 @@ export default defineNuxtConfig({
       title: "Graphistools",
       meta: [{ charset: "utf-8" }],
     },
-    baseURL: "/graphistools/",
+    baseURL: "fougerebleprojects.github.io",
   },
 });
