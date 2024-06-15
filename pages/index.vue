@@ -49,6 +49,42 @@ const removeColor = (colorIndex: number) => {
 const addColor = () => {
   colors.value.push("#000000");
 };
+
+function hexToRgb(hex: string) {
+  const r = parseInt(hex.slice(1, 3), 16);
+  const g = parseInt(hex.slice(3, 5), 16);
+  const b = parseInt(hex.slice(5, 7), 16);
+  return { r, g, b };
+}
+
+const RED = 0.2126;
+const GREEN = 0.7152;
+const BLUE = 0.0722;
+
+const GAMMA = 2.4;
+
+function luminance({ r, g, b }: any) {
+  var a = [r, g, b].map((v) => {
+    v /= 255;
+    return v <= 0.03928 ? v / 12.92 : Math.pow((v + 0.055) / 1.055, GAMMA);
+  });
+  return a[0] * RED + a[1] * GREEN + a[2] * BLUE;
+}
+
+function contrast(rgb1: any, rgb2: any) {
+  var lum1 = luminance(rgb1);
+  var lum2 = luminance(rgb2);
+  var brightest = Math.max(lum1, lum2);
+  var darkest = Math.min(lum1, lum2);
+  return (brightest + 0.05) / (darkest + 0.05);
+}
+
+const getContrast = (bgColor: string, textColor: string) => {
+  const rgbBg = hexToRgb(bgColor);
+  const rgbText = hexToRgb(textColor);
+
+  return parseFloat(contrast(rgbBg, rgbText).toFixed(2));
+};
 </script>
 
 <template>
@@ -93,8 +129,12 @@ const addColor = () => {
           </div>
         </div>
         <div v-if="mode === 'text'">
-          <div v-for="(colorB, colorBIndex) in colors" :key="colorB">
-            <div v-if="colorBIndex > 0" class="flex">
+          <div
+            v-for="(colorB, colorBIndex) in colors"
+            :key="colorB"
+            class="mb-1"
+          >
+            <div v-if="colorBIndex > 0" class="flex gap-1">
               <div
                 v-for="(colorA, colorAIndex) in colors"
                 :key="colorA"
@@ -105,9 +145,40 @@ const addColor = () => {
                   minWidth: '150px',
                   color: colors[(colorAIndex + colorBIndex) % colors.length],
                 }"
-                class="flex justify-center items-center text-xl text-center"
+                class="flex flex-col justify-center items-center text-xl text-center"
               >
-                Lorem ipsum
+                <div>Lorem ipsum</div>
+                <div
+                  :class="
+                    getContrast(
+                      colorA,
+                      colors[(colorAIndex + colorBIndex) % colors.length],
+                    ) >= 4.5
+                      ? 'bg-green-200'
+                      : 'bg-red-200'
+                  "
+                  class="mt-2 text-black inline-block px-2 py-0.5 text-xs"
+                >
+                  {{
+                    getContrast(
+                      colorA,
+                      colors[(colorAIndex + colorBIndex) % colors.length],
+                    )
+                  }}
+
+                  <span
+                    v-if="
+                      getContrast(
+                        colorA,
+                        colors[(colorAIndex + colorBIndex) % colors.length],
+                      ) >= 4.5
+                    "
+                    class="text-green-700 font-bold"
+                  >
+                    ✓
+                  </span>
+                  <span v-else class="text-red-700 font-bold"> X </span>
+                </div>
               </div>
             </div>
           </div>
