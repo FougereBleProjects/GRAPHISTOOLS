@@ -153,7 +153,7 @@ const getContrast = (bgColor: string, textColor: string) => {
                     getContrast(
                       colorA,
                       colors[(colorAIndex + colorBIndex) % colors.length],
-                    ) >= 4.5
+                    ) >= 3
                       ? 'bg-green-200'
                       : 'bg-red-200'
                   "
@@ -171,7 +171,7 @@ const getContrast = (bgColor: string, textColor: string) => {
                       getContrast(
                         colorA,
                         colors[(colorAIndex + colorBIndex) % colors.length],
-                      ) >= 4.5
+                      ) >= 3
                     "
                     class="text-green-700 font-bold"
                   >
