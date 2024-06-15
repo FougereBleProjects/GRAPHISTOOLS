@@ -8,7 +8,7 @@
     "generate": "nuxt generate",
     "preview": "nuxt preview",
     "postinstall": "nuxt prepare",
-    "deploy": "nuxt generate && gh-pages --dotfiles -d .output/public"
+    "deploy": "nuxt generate && gh-pages -t true --dotfiles -d .output/public"
   },
   "dependencies": {
     "@nuxtjs/tailwindcss": "^6.12.0",
