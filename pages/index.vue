@@ -19,7 +19,7 @@ const mode = ref<"grid" | "text">("grid");
       <LeftPane>
         <MenuButtons v-model:mode="mode" />
 
-        <div v-if="mode === 'grid'" class="border-4 inline-block">
+        <div v-if="mode === 'grid'">
           <GridScreen :colors="colors" />
         </div>
         <div v-if="mode === 'text'">

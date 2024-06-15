@@ -1,4 +1,6 @@
 <script lang="ts" setup>
+import GridCase from "~/components/screens/parts/grid-case.vue";
+
 const props = defineProps({
   colors: {
     type: Array as () => string[],
@@ -6,59 +8,33 @@ const props = defineProps({
   },
 });
 
+const greyMode = ref<boolean>(false);
+
 const nbCols = computed(() => {
   return props.colors.length * 2 + 1;
 });
-
-const getBgColor = (lineIndex: number, colIndex: number) => {
-  if (colIndex % 2 === 0 && lineIndex % 2 === 0) {
-    return "transparent";
-  }
-
-  if (colIndex % 2 === 0) {
-    return props.colors[(lineIndex - 1) / 2];
-  } else {
-    return props.colors[(colIndex - 1) / 2];
-  }
-};
-
-const getWidth = (colIndex: number) => {
-  if (colIndex === 0) {
-    return "32px";
-  } else if (colIndex === nbCols.value - 1) {
-    return "32px";
-  } else if (colIndex % 2 === 1) {
-    return "32px";
-  } else {
-    return "8px";
-  }
-};
-
-const getHeight = (lineIndex: number) => {
-  if (lineIndex === 0) {
-    return "32px";
-  } else if (lineIndex === nbCols.value - 1) {
-    return "32px";
-  } else if (lineIndex % 2 === 1) {
-    return "32px";
-  } else {
-    return "8px";
-  }
-};
 </script>
 
 <template>
-  <div v-for="(line, lineIndex) in nbCols" :key="lineIndex">
-    <div class="flex">
-      <div
-        v-for="(col, colIndex) in nbCols"
-        :key="colIndex"
-        :style="{
-          'background-color': getBgColor(lineIndex, colIndex),
-          width: getWidth(colIndex),
-          height: getHeight(lineIndex),
-        }"
-      ></div>
+  <div>
+    <div class="mb-2">
+      <input v-model="greyMode" type="checkbox" />
+      Niveau de gris
+    </div>
+    <div class="border-4 inline-block">
+      <div v-for="(line, lineIndex) in nbCols" :key="lineIndex">
+        <div class="flex">
+          <GridCase
+            v-for="(col, colIndex) in nbCols"
+            :key="colIndex"
+            :col-index="colIndex"
+            :colors="colors"
+            :grey-mode="greyMode"
+            :line-index="lineIndex"
+            :nb-cols="nbCols"
+          />
+        </div>
+      </div>
     </div>
   </div>
 </template>

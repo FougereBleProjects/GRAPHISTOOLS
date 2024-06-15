@@ -33,9 +33,22 @@ export const useColor = () => {
     return parseFloat(((brightest + 0.05) / (darkest + 0.05)).toFixed(2));
   };
 
+  const rgbToGrayscale = ({ r, g, b }: IRGB) => {
+    // const r2 = r * 0.3; // ------> Red is low
+    // const g2 = g * 0.59; // ---> Green is high
+    // const b2 = b * 0.11; // ----> Blue is very low
+    //
+    // const gray = r2 + g2 + b2;
+
+    const gray = (r + g + b) / 3;
+
+    return `rgb(${gray},${gray},${gray})`;
+  };
+
   return {
     hexToRgb,
     luminance,
     contrast,
+    rgbToGrayscale,
   };
 };
