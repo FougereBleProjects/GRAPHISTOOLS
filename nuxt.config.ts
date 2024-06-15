@@ -3,6 +3,9 @@ export default defineNuxtConfig({
   devtools: { enabled: true },
   modules: ["@nuxtjs/tailwindcss"],
   ssr: false,
+  generate: {
+    fallback: "404.html",
+  },
   app: {
     head: {
       title: "Graphistools",
