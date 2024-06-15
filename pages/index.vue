@@ -1,5 +1,6 @@
 <script lang="ts" setup>
 const colors = ref<string[]>(["#f97316", "#84cc16", "#06b6d4", "#d946ef"]);
+const mode = ref<string>("grid");
 
 const nbCols = computed(() => {
   return colors.value.length * 2 + 1;
@@ -59,7 +60,24 @@ const addColor = () => {
     </div>
     <div class="grid max-h-screen grid-cols-1 md:grid-cols-2 gap-0 flex-1">
       <div class="border-b md:border-r overflow-auto p-4 md:p-8 pt-20 md:pt-20">
-        <div class="border-4 inline-block">
+        <div class="mb-4 flex gap-2 border-b">
+          <button
+            :class="{ 'bg-gray-100': mode !== 'grid' }"
+            class="border border-b-0 px-4 py-1"
+            @click="mode = 'grid'"
+          >
+            Grille
+          </button>
+          <button
+            :class="{ 'bg-gray-100': mode !== 'text' }"
+            class="border border-b-0 px-4 py-1"
+            @click="mode = 'text'"
+          >
+            Texte
+          </button>
+        </div>
+
+        <div v-if="mode === 'grid'" class="border-4 inline-block">
           <div v-for="(line, lineIndex) in nbCols" :key="lineIndex">
             <div class="flex">
               <div
@@ -71,6 +89,26 @@ const addColor = () => {
                   height: getHeight(lineIndex),
                 }"
               ></div>
+            </div>
+          </div>
+        </div>
+        <div v-if="mode === 'text'">
+          <div v-for="(colorB, colorBIndex) in colors" :key="colorB">
+            <div v-if="colorBIndex > 0" class="flex">
+              <div
+                v-for="(colorA, colorAIndex) in colors"
+                :key="colorA"
+                :style="{
+                  'background-color': colorA,
+                  width: '200px',
+                  height: '75px',
+                  minWidth: '150px',
+                  color: colors[(colorAIndex + colorBIndex) % colors.length],
+                }"
+                class="flex justify-center items-center text-xl text-center"
+              >
+                Lorem ipsum
+              </div>
             </div>
           </div>
         </div>
